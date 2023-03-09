@@ -1,22 +1,88 @@
-// import { graphql } from "graphql";
-// import { makeExecutableSchema } from "@graphql-tools/schema";
-// import { typeDefs, resolvers } from "./index";
+import { ApolloServer, gql } from "apollo-server";
+import { createTestClient } from "apollo-server-testing";
 
-// const schema = makeExecutableSchema({ typeDefs, resolvers });
+const typeDefs = gql`
+  type University {
+    name: String!
+    state_province: String!
+    web_pages: [String!]!
+  }
 
-// describe("universities query", () => {
-//   it("returns an array of universities", async () => {
-//     const query = `
-//       query {
-//         universities {
-//           name
-//           state_province
-//           web_pages
-//         }
-//       }
-//     `;
+  type Query {
+    universities(name: String, state_province: String): [University!]!
+  }
+`;
 
-//     const result = await graphql(schema, query);
-//     expect(result.data?.universities).toBeInstanceOf(Array);
-//   });
-// });
+describe("resolvers", () => {
+  const server = new ApolloServer({
+    typeDefs,
+    // resolvers,
+  });
+
+  const { query } = createTestClient(server);
+
+  it("should return all universities when no filters are applied", async () => {
+    const { data } = await query({
+      query: gql`
+        {
+          universities {
+            name
+            state_province
+            web_pages
+          }
+        }
+      `,
+    });
+
+    expect(data).toMatchSnapshot();
+  });
+
+  it("should return universities filtered by name", async () => {
+    const { data } = await query({
+      query: gql`
+        {
+          universities(name: "university") {
+            name
+            state_province
+            web_pages
+          }
+        }
+      `,
+    });
+
+    expect(data).toMatchSnapshot();
+  });
+
+  it("should return universities filtered by state_province", async () => {
+    const { data } = await query({
+      query: gql`
+        {
+          universities(state_province: "gauteng") {
+            name
+            state_province
+            web_pages
+          }
+        }
+      `,
+    });
+
+    expect(data).toMatchSnapshot();
+  });
+
+  it("should return universities filtered by both name and state_province", async () => {
+    const { data } = await query({
+      query: gql`
+        {
+          universities(name: "university", state_province: "gauteng") {
+            name
+            state_province
+            web_pages
+          }
+        }
+      `,
+    });
+
+    expect(data).toMatchSnapshot();
+  });
+});
+``;
