@@ -5,13 +5,6 @@ function App() {
   const [teamFilter, setTeamFilter] = useState("");
   const [sortOrder, setSortOrder] = useState("desc");
 
-  // useEffect(() => {
-  //   fetch("https://fantasy.premierleague.com/api/bootstrap-static/")
-  //     .then((response) => response.text())
-  //     .then((result) => console.log(result))
-  //     .catch((error) => console.log("error", error));
-  // }, []);
-
   useEffect(() => {
     fetch("https://fantasy.premierleague.com/api/bootstrap-static/")
       .then((res) => res.json())
