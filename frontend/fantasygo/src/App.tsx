@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 
 function App() {
-  const [isBlock, setBlocks] = useState<[]>([]);
+  const [isBlock, setBlocks] = useState<any[]>([]);
   const [teamFilter, setTeamFilter] = useState("");
   const [sortOrder, setSortOrder] = useState("desc");
 
@@ -36,11 +36,15 @@ function App() {
     setBlocks(sortedPlayers);
   };
 
-  const filterPlayersByTeam = (isBlock) => {
+  const filterPlayersByTeam = (isBlock: {
+    team: { toString: () => string };
+  }) => {
     return teamFilter === "" || isBlock.team.toString() === teamFilter;
   };
 
-  const handleTeamFilterChange = (event) => {
+  const handleTeamFilterChange = (event: {
+    target: { value: SetStateAction<string> };
+  }) => {
     setTeamFilter(event.target.value);
   };
 
