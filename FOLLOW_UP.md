@@ -11,7 +11,7 @@ Graphql, express and node-fetch
 
 ### Q) Any other comments we should read before evaluating your solution?
 
-## I used a plugin to bypass CORs, it was faster than creating a proxy
+I used a plugin to bypass CORs, it was faster than creating a proxy
 
 # General:
 
